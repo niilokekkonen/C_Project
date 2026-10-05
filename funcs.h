@@ -17,3 +17,4 @@ void read_string(char *str, int str_len);
 void print_start(void);
 void print_menu(int avg_grade, int *grade_arr, int arr_len);
 int convert_grade(int percentage);
+bool save_grades(subject *grade_arr, int arr_len, float avg_grade, const char *student_name, const char *output_file); 

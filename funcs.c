@@ -7,19 +7,50 @@ void print_grades(subject *grade_arr, int arr_len, float avg_grade, const char *
 {
     if (grade_arr != NULL) 
     {
-        printf("***********************************\n");
+        printf("**************************************\n");
         printf("Student: %s\n", student_name);
-        printf("-----------------------------------\n");
-        printf("Subject\tGrade\tPercentage\n");
-        printf("-----------------------------------\n");  
+        printf("--------------------------------------\n");
+        printf("->%-15s %7s %12s\n", "Subject", "Grade", "Percentage");
+        printf("--------------------------------------\n");  
         for (int i = 0; i < arr_len; i++) 
         {
-            printf("->\t%10s\t%1d\t%3d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
+            printf("%-15s %7d %12d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
         }
-        printf("\nAverage grade: %5f\n", avg_grade); 
-        printf("-----------------------------------"); 
+        printf("\nAverage grade: %5.2f\n", avg_grade); 
+        printf("--------------------------------------\n"); 
     }
 
+}
+
+
+// Writes the calculated/individual grades into const char *output file
+// Returns true if succeeds
+// Returns false if out file == NULL or *grade_arr == NULL
+bool save_grades(subject *grade_arr, int arr_len, float avg_grade, const char *student_name, const char *output_file) 
+{
+    FILE *out_file = NULL; 
+    out_file = fopen(output_file, "w");
+    if (out_file == NULL) 
+    {
+        // Couldn't open file specified
+        return false;
+    }
+    else 
+    {
+        fprintf(out_file, "**************************************\n");
+        fprintf(out_file, "Student: %s\n", student_name);
+        fprintf(out_file, "--------------------------------------\n");
+        fprintf(out_file, "%-15s %7s %12s\n", "Subject", "Grade", "Percentage");
+        fprintf(out_file, "--------------------------------------\n");  
+        for (int i = 0; i < arr_len; i++) 
+        {
+            fprintf(out_file, "%-15s %7d %12d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
+        }
+        fprintf(out_file, "\nAverage grade:%5.2f\n", avg_grade); 
+        fprintf(out_file, "--------------------------------------\n"); 
+        fclose(out_file);
+        return true;
+    }
 }
 
 void print_percentages(void) 

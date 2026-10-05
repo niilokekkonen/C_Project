@@ -4,11 +4,12 @@
 #include "funcs.h"
 #include "funcs.c"
 
-#define NAME_LEN 50
-#define SUBJECT_LEN 50
-#define MAX_PRCNT 100
-#define LOW_PRCNT 0
-
+#define NAME_LEN 50 // User name len
+#define SUBJECT_LEN 50 // subject name len
+#define MAX_PRCNT 100 // max percent
+#define LOW_PRCNT 0 // Lower limit for grade percentages
+#define OUT_FILE_LEN 50 // output file name len
+#define MAX_SBJ_CNT 20 // Maximum subjects
 /*
 Student grade calculator
 Write a program that calculates and displays the final grades for a student based on their scores in
@@ -51,8 +52,10 @@ int main(void)
 {
     // Init string arrays
     char name[NAME_LEN] = {'\n'}; 
+    char out_file[OUT_FILE_LEN] = {'\n'};
     int subject_cnt = 0;
     float avg_grade = 0;
+    bool grades_saved = false;
     // Starting program
     print_start();
     read_string(name, NAME_LEN);
@@ -63,10 +66,16 @@ int main(void)
     }
     else 
     {
-        printf("How many subjects you want to include in the average?");
+        printf("How many subjects you want to include in the average?\n");
+        printf("Maximum of %d", MAX_SBJ_CNT);
         subject_cnt = read_number("\n");
         if (subject_cnt > 0) 
-        {   
+        {
+            if (subject_cnt > MAX_SBJ_CNT) 
+            {
+            fprintf(stderr, "You must use less subjects\n");
+            return 3;
+            }   
             subject sub_arr[subject_cnt]; // Creating struct_array for easy data management
             int read_subjects = 0; // The amount of asked subjects
             int read_num = 0;
@@ -101,7 +110,26 @@ int main(void)
             }
             avg_grade = calc_avg(sub_arr, subject_cnt);
             print_grades(sub_arr, subject_cnt, avg_grade, name);
-            return 0;
+            printf("Enter a filename to save the subjects\n");
+            read_string(out_file, OUT_FILE_LEN);
+            if (out_file[0] == '\n') 
+            {
+                fprintf(stderr, "Failed to read string\n");
+            }
+            else 
+            {
+                grades_saved = save_grades(sub_arr, subject_cnt, avg_grade, name, out_file);
+                if (grades_saved) 
+                {
+                printf("Successfully saved your grades to %s\n", out_file);
+                return 0;
+                }
+                else 
+                {
+                fprintf(stderr, "Failed to save data into %s\n", out_file);
+                return 1;
+                }
+            }
         }
         else 
         {
