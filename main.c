@@ -10,6 +10,7 @@
 #define LOW_PRCNT 0 // Lower limit for grade percentages
 #define OUT_FILE_LEN 50 // output file name len
 #define MAX_SBJ_CNT 20 // Maximum subjects
+
 /*
 Student grade calculator
 Write a program that calculates and displays the final grades for a student based on their scores in
