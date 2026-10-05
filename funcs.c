@@ -7,47 +7,47 @@ void print_grades(subject *grade_arr, int arr_len, float avg_grade, const char *
 {
     if (grade_arr != NULL) 
     {
-        printf("**************************************\n");
+        printf("*****************************************\n");
         printf("Student: %s\n", student_name);
-        printf("--------------------------------------\n");
-        printf("->%-15s %7s %12s\n", "Subject", "Grade", "Percentage");
-        printf("--------------------------------------\n");  
+        printf("-----------------------------------------\n");
+        printf("%-20s %7s %12s\n", "Subject", "Grade", "Percentage");
+        printf("-----------------------------------------\n");  
         for (int i = 0; i < arr_len; i++) 
         {
-            printf("%-15s %7d %12d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
+            printf("%-20s %7d %12d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
         }
         printf("\nAverage grade: %5.2f\n", avg_grade); 
-        printf("--------------------------------------\n"); 
+        printf("-----------------------------------------\n"); 
     }
 
 }
 
 
-// Writes the calculated/individual grades into const char *output file
+// Writes the calculated + individual grades into const char *output file
 // Returns true if succeeds
 // Returns false if out file == NULL or *grade_arr == NULL
 bool save_grades(subject *grade_arr, int arr_len, float avg_grade, const char *student_name, const char *output_file) 
 {
     FILE *out_file = NULL; 
     out_file = fopen(output_file, "w");
-    if (out_file == NULL) 
+    if (out_file == NULL || grade_arr == NULL) 
     {
         // Couldn't open file specified
         return false;
     }
     else 
     {
-        fprintf(out_file, "**************************************\n");
+        fprintf(out_file, "*****************************************\n");
         fprintf(out_file, "Student: %s\n", student_name);
-        fprintf(out_file, "--------------------------------------\n");
-        fprintf(out_file, "%-15s %7s %12s\n", "Subject", "Grade", "Percentage");
-        fprintf(out_file, "--------------------------------------\n");  
+        fprintf(out_file, "-----------------------------------------\n");
+        fprintf(out_file, "%-20s %7s %12s\n", "Subject", "Grade", "Percentage");
+        fprintf(out_file, "-----------------------------------------\n");  
         for (int i = 0; i < arr_len; i++) 
         {
-            fprintf(out_file, "%-15s %7d %12d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
+            fprintf(out_file, "%-20s %7d %12d\n", grade_arr[i].name, grade_arr[i].grade, grade_arr[i].grade_prcnt);
         }
         fprintf(out_file, "\nAverage grade:%5.2f\n", avg_grade); 
-        fprintf(out_file, "--------------------------------------\n"); 
+        fprintf(out_file, "-----------------------------------------\n"); 
         fclose(out_file);
         return true;
     }
@@ -60,17 +60,17 @@ void print_percentages(void)
 }
 void print_start(void) 
 {
-    printf("Welcome to THE grade calculator\n");
+    printf("Welcome to StuGrade\nThe calculator for your grades\n");
     printf("Please enter your name!\n");
 }
 
 // 'Converts' the grades from percentage to decimal
 /* Uses the following convertion table
-o 5: 90-100
-o 4: 80-89
-o 3: 70-79
-o 2: 60-69
-o 1: 50-59
+o 5 <= 90-100
+o 4 <= 80-89
+o 3 <= 70-79
+o 2 <= 60-69
+o 1 <= 50-59
 o 0: Below 50
 */
 // Returns the grade if succesfull, else 0
@@ -79,10 +79,10 @@ int convert_grade(int percentage)
     int rows = 5;
     int cols = 11;
     int grade_table[5][11] = {
-                             {50, 51, 52, 53, 54, 55, 56, 57, 58, 59}, // 1st index = grade 1
-                             {60, 61, 62, 63, 64, 65, 66, 67, 68, 69}, // 2nd index = grade 2
-                             {70, 71, 72, 73, 74, 75, 76 ,77,78, 79},  // 3rd index = grade 3
-                             {80, 81, 82, 83, 84, 85, 86, 87, 88, 89}, // 4th index = grade 4
+                             {50, 51, 52, 53, 54, 55, 56, 57, 58, 59},     // 1st index = grade 1
+                             {60, 61, 62, 63, 64, 65, 66, 67, 68, 69},     // 2nd index = grade 2
+                             {70, 71, 72, 73, 74, 75, 76 ,77,78, 79},      // 3rd index = grade 3
+                             {80, 81, 82, 83, 84, 85, 86, 87, 88, 89},     // 4th index = grade 4
                              {90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100} // 5th index = grade 5
                              };
     int grade = 0;
