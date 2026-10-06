@@ -116,7 +116,7 @@ void read_string(char *str, int str_len)
     bool removed = remove_lf(str);
     if (removed == false)
     {
-        printf("Clearing input buffer...\nToo many characters were entered\nProgram Not Accurate\n");
+        printf("Clearing input buffer...\nToo many characters were entered\n");
         clear_ib();
     }
 }

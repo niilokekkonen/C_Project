@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include "funcs.h"
 #include "funcs.c"
-#include <time.h>
 
 #define NAME_LEN 50 // User name len
 #define SUBJECT_LEN 50 // subject name len
@@ -60,7 +59,6 @@ int main(void)
     bool grades_saved = false;
     // Starting program
     print_start();
-    Sleep(10);
     read_string(name, NAME_LEN);
     if (name[0] == '\n') 
     {
