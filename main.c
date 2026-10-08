@@ -36,7 +36,7 @@ o 0: Below 50
 • The program must also write the same report to a file
 
 # PLAN for execution
-# Needed functions read_string, read_number, calc_avg, calc_grade from percentage, print_menu
+# Needed functions read_string, read_number, calc_avg, calc_grade from percentage, print_menu, and function to write result into .txtfile
 
 # Vision for functionality.
 1. Program starts and asks, the name with read string. (Validate input)
