@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include "funcs.h"
+
+#define INP_SIZE 32
+
 
 // Prints grade, grade percentage, and average grade
 void print_grades(subject *grade_arr, int arr_len, float avg_grade, const char *student_name) 
@@ -28,9 +32,15 @@ void print_grades(subject *grade_arr, int arr_len, float avg_grade, const char *
 // Returns false if out file == NULL or *grade_arr == NULL
 bool save_grades(subject *grade_arr, int arr_len, float avg_grade, const char *student_name, const char *output_file) 
 {
-    FILE *out_file = NULL; 
+    FILE *out_file = NULL;
+    if (grade_arr == NULL) 
+    {
+        return false;
+    }
+    else 
+    {
     out_file = fopen(output_file, "w");
-    if (out_file == NULL || grade_arr == NULL) 
+    if (out_file == NULL) 
     {
         // Couldn't open file specified
         return false;
@@ -51,6 +61,7 @@ bool save_grades(subject *grade_arr, int arr_len, float avg_grade, const char *s
         fclose(out_file);
         return true;
     }
+    } 
 }
 
 void print_percentages(void) 
@@ -111,13 +122,19 @@ int convert_grade(int percentage)
 //*str is the variable where the read string is placed, max_str_len
 void read_string(char *str, int str_len) 
 {
-    fgets(str, str_len, stdin);
-    // Removing linefeed from string
-    bool removed = remove_lf(str);
-    if (removed == false)
+    if (fgets(str, str_len, stdin) == NULL) 
     {
-        printf("Clearing input buffer...\nToo many characters were entered\n");
-        clear_ib();
+        str[0] = '\0';
+    }
+    else 
+    {
+         // Removing linefeed from string
+        bool removed = remove_lf(str);
+        if (removed == false)
+        {
+            printf("Clearing input buffer...\nToo many characters were entered\n");
+            clear_ib();
+        }
     }
 }
 
@@ -148,37 +165,44 @@ bool remove_lf(char *str)
 // clears the input buffer
 void clear_ib(void) 
 {
-    while (getchar() != '\n');
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
 // Reads a number from stdinput
-// Returns the number if read else returns 0 
-int read_number(const char *prompt)
+// Returns true and uses *pnum to store number if read 
+// Returns false if no number can be read, or parsing fails
+bool read_number(const char *prompt, int *pnum)
 {
-    int number = 0;
-    int *pnum = &number;
-    char input[32];
+    char input[INP_SIZE];
+    bool got_newline = false;
     printf("%s", prompt);
-    fgets(input, 32, stdin);
-    bool parsed = parse_number(input, pnum);
-    if (parsed) 
+    if ((fgets(input, sizeof(input), stdin) == NULL))
     {
-      //printf("Parsed(%d) input %d\n", parsed, number);
-      return number;  
-    }
-    else if (!parsed)
-    {
-        //printf("Parsed(%d) input %d\n", parsed, number);
-        return -1;
+        return false;
     }
     else 
     {
-        return -2;
+        got_newline = remove_lf(input);
+        if (!got_newline) 
+        {
+            clear_ib();
+        }
+        bool parsed = parse_number(input, pnum);
+        if (parsed) 
+        {
+            return true;  
+        }
+        else
+        {
+            return false;
+        }
     }
 }   
 
 // parses a number from char to int
-// Returns the number if parsed else returns 0
+// Returns true and uses ptr to save the number if parsed 
+// else returns false
 bool parse_number(char *input, int *pnum) 
 {
     if (sscanf(input, "%d", pnum) == 1) 
@@ -186,29 +210,32 @@ bool parse_number(char *input, int *pnum)
         return true;    
     } else 
     {
-        printf("Parsing failed\n");
         return false;
     }
 }
 
 // Function that reads a number, and checks if its in range of int low, int high
 // Returns false if number out of range
-// Else returns number 
+// Else returns true and the number 
 // Saves the read number to *pnum
 bool read_range(int low, int high, int *pnum)
 {
     printf("Enter a number between (%d - %d)", low, high);
-    int number = read_number("\n");
-    if (number < low || number > high) 
+    bool is_number = read_number("\n", pnum);
+    if (is_number) 
     {
-        *pnum = number; // 'returns' read value anyway
-        return false;
+        if (*pnum < low || *pnum > high) 
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
-    else if (number >= low && number <= high)
+    else 
     {
-        //printf("Number is in range\n");
-        *pnum = number;
-        return true;
+        return false;
     }
 }
 
