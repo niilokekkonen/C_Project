@@ -240,6 +240,7 @@ bool read_range(int low, int high, int *pnum)
 }
 
 // Calculates average from array of subject structs
+// Returns average, if len == 0 returns 0
 float calc_avg(subject *sub_arr, int len)
 {
     if (len != 0) 

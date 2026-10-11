@@ -8,7 +8,7 @@
 #define MAX_PRCNT 100 // max percent
 #define LOW_PRCNT 0 // Lower limit for grade percentages
 #define OUT_FILE_LEN 50 // output file name len
-#define MAX_SBJ_CNT 5 // Maximum subjects 
+#define MAX_SBJ_CNT 10 // Maximum subjects 
 
 /*
 Student grade calculator
@@ -76,12 +76,12 @@ int main(void)
             if (subject_cnt > MAX_SBJ_CNT) 
             {
                 fprintf(stderr, "You must use less subjects\n");
-                return 3;
+                return 3; // Returns 3 if subject count is too much
             }
             else if (subject_cnt <= 0) 
             {
                 fprintf(stderr, "You must use more subjects");
-                return 3;
+                return 3; // or subject is negative
             }   
             subject sub_arr[subject_cnt]; // Creating struct_array for easy data management
             int read_subjects = 0; // The amount of asked subjects
@@ -96,28 +96,28 @@ int main(void)
                 read_string(sub_arr[read_subjects].name, SUBJECT_LEN);
                 printf("Enter subject %d grade percentage\n",read_subjects + 1);
                 in_range = read_range(LOW_PRCNT, MAX_PRCNT, pread);
-                    if (in_range != false) 
+                if (in_range != false) 
+                {
+                    sub_arr[read_subjects].grade_prcnt = *pread;
+                }          
+                else 
+                {
+                    // Checking for end of file
+                    if(feof(stdin)) 
                     {
-                        sub_arr[read_subjects].grade_prcnt = *pread;
-                    }          
+                        fprintf(stderr, "Input was stopped\n");
+                        return 1; // Returns 1 if the input stops before intended
+                    }
                     else 
                     {
-                        // Checking for end of file
-                        if(feof(stdin)) 
-                        {
-                            fprintf(stderr, "Input stopped\n");
-                            return 1;
-                        }
-                        else 
-                        {
-                            sub_arr[read_subjects].grade_prcnt = 0;
-                            printf("Grade not in range (%d - %d)\n", LOW_PRCNT, MAX_PRCNT);
-                            read_subjects--; // Not moving forward until a valid grade has been passed
-                        }
+                        sub_arr[read_subjects].grade_prcnt = 0;
+                        printf("Grade not in range (%d - %d)\n", LOW_PRCNT, MAX_PRCNT);
+                        read_subjects--; // Not moving forward until a valid grade has been passed
                     }
+                }
             }
             // Now we have read all the grades
-            // Going through the list of structures to convert grades, and save it back to
+            // Going through the list of structures to convert grades, and save it back to the structs
             for (int i = 0; i < read_subjects; i++) 
             {
                 int prcnt = sub_arr[i].grade_prcnt;
@@ -130,7 +130,7 @@ int main(void)
             if (out_file[0] == '\0') 
             {
                 fprintf(stderr, "Failed to read string\n");
-                return 1;
+                return 1; // Returns 1 if reading the filename fails
             }
             else 
             {
@@ -150,7 +150,7 @@ int main(void)
         else 
         {
             printf("Couldn't read subject count\nEnter a valid number");
-            return 2;
+            return 2; 
         }
 
     }
