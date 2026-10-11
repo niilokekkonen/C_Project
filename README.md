@@ -8,5 +8,8 @@ and of course each subjects grade.
 - Check program_flow.png to see how the program operates when the input is correct
 
 # Usage
-- To use the program, all you need to do is clone or download the project. Compile the main.c file to main.exe, and run it.
-- the expected output should look like max_science.txt. 
+- To use the program, all you need to do is clone or download the project.
+- Navigate to the project folder and compile it in your terminal using GCC:
+  `gcc main.c funcs.c -o stugrade`
+- Or use any C compiler of your choosing.
+- The expected output should look like max_science.txt.
