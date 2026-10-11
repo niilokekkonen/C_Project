@@ -111,7 +111,7 @@ int main(void)
                         else 
                         {
                             sub_arr[read_subjects].grade_prcnt = 0;
-                            printf("Grade not in range(%d - %d)\nTry entering a valid number\n", LOW_PRCNT, MAX_PRCNT);
+                            printf("Grade not in range (%d - %d)\n", LOW_PRCNT, MAX_PRCNT);
                             read_subjects--; // Not moving forward until a valid grade has been passed
                         }
                     }
